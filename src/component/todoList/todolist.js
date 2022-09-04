@@ -1,27 +1,17 @@
-import React, { useContext } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { toDoContext } from "../context/todocontext";
-import { ToDoItem } from "../todoitem/todoitem";
+import React, { useContext } from 'react'
+import {Link, useLocation} from 'react-router-dom'
+import { todoContext } from '../context/todocontext';
+import { TodoItem } from '../todoItem/todoItem';
 
-
-export const ToDoList = ()=>{
-
-    const {pathname} = useLocation()
-
-    const toDoCurrentGroup = pathname.slice(5)
-
-    const {toDo} = useContext(toDoContext)
-
-    const toDoList = toDo.filter((todo) => todo.date === toDoCurrentGroup )
-
-    return(
+export const TodoList = () =>{
+    const {pathname} = useLocation();
+    const todoListDate = pathname.slice(5);
+    const {todo } = useContext(todoContext);
+    const todoGroup = todo.filter((item)=> item.date === todoListDate)
+      return (
         <div>
-            <Link to="/"><button>Back</button></Link>
-            {toDoList.map((todo, index)=>{
-                return(
-                    <ToDoItem key={todo.description} todo={todo}></ToDoItem>
-                )
-            })}
+          <Link to='/'><button>Back</button></Link>
+          {todoGroup.map((singleTodo , index) =>  ( <TodoItem key={singleTodo.description} singleTodo = {singleTodo}/>))}
         </div>
-    )
+      )
 }

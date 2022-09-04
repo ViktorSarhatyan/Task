@@ -1,67 +1,62 @@
 import React, { useContext, useState } from "react";
-import { toDoContext } from "../context/todocontext";
-import { DateList } from "../dateList/datelist";
+import { todoContext } from "../context/todocontext";
+import { DateList } from "../dateList/dateList";
 
 
-export const CreateToDo = ()=>{
-
-    const [toDoDescription, setToDescription] = useState("")
-
-    const [toDoDate, setToDoDate] = useState("")
-
-
-    const {toDo, setToDo, date, setDate } = useContext(toDoContext)
-
-    const handleInputChange = (e)=>{
+export const CreateTodo = ()=>{
+    const [description ,setDescription] = useState('')
+    const [todoDate ,setTodoDate] = useState('')
+    const {todo, setTodo , date ,setDate} = useContext(todoContext)
+    
+    const handleInputChange = (e) => {
         if(e.target.name === "description"){
-            setToDescription(e.target.value)
+            setDescription(e.target.value)
         }
 
         if(e.target.name === "date"){
-            setToDoDate(e.target.value)
+            setTodoDate(e.target.value)
         }
+        
     }
 
-    const createToDo = ()=>{
-        if( !toDoDescription.trim() || !toDoDate.trim()){
-            alert("Two fields are required")
+    const handleCreateTodo = () => {
+        if(!description.trim || !todoDate.trim){
+            alert('each filds are required')
             return
         }
 
-        if(toDo.some((toDo)=> toDo.description === toDoDescription)){
-            alert("To Do with this name already exsits")
+        if(todo.some((item) => item.description === description)){
+            alert('To Do with this name already exsits')
             return
         }
 
-
-        const newToDo = {
-            description: toDoDescription,
-            date: toDoDate,
-            completed:false
+        const newTodo = {
+            description : description,
+            date : todoDate,
+            completed : false
         }
 
-        setToDo((prev)=>[...prev,newToDo])
+        setTodo((prevState)=> [...prevState , newTodo])
 
-        if(!date[toDoDate]){
-            setDate((prev)=>{
-                return {...prev, [toDoDate]:1}
+        if(!date[todoDate]){
+            setDate((prev) => {
+                return { ...prev , [todoDate] : 1}
             })
         }else{
-            date[toDoDate] = date[toDoDate] + 1
+            date[todoDate] = date[todoDate] + 1
             setDate({...date})
         }
 
-        setToDescription("")
-        setToDoDate("")
+        setDescription("")
+        setTodoDate("")
 
     }
 
-
     return(
         <div>
-            <input type="text" name="description" value={toDoDescription} onChange={handleInputChange}></input>
-            <input type="date" name="date" value={toDoDate} onChange={handleInputChange}></input>
-            <button onClick={createToDo}>Create</button>
+            <input value={description} onChange={handleInputChange} type='text' name='description' />
+            <input value={todoDate} onChange={handleInputChange} type='date' name='date' />
+            <button onClick={handleCreateTodo}> Create Todo</button>
             <DateList></DateList>
         </div>
     )

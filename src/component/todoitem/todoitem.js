@@ -1,77 +1,64 @@
-import React, { useContext, useState } from "react";
-import { toDoContext } from "../context/todocontext";
+import React, { useContext , useState } from 'react'
+import { todoContext } from '../context/todocontext';
+
+export const TodoItem = ({singleTodo}) =>{
+        const {todo ,setTodo , date ,setDate} = useContext(todoContext)
+        const index = todo.findIndex((item) => item.description === singleTodo.description) 
+        const [isEdit , setIsEdit] = useState(false)
+        const [newDescription, setNewDescription] = useState(singleTodo.description)
 
 
-export const ToDoItem = ({todo})=>{
-
-    const {toDo, setToDo, date, setDate} = useContext(toDoContext)
-
-    const [isEdit, setIsEdit] = useState(false)
-
-    const [newDescription, setNewDescription] = useState(todo.description)
-
-    const index = toDo.findIndex((item)=> item.description === todo.description)
-
-    const deleteToDo = ()=>{
-        const updatedToDo = toDo.filter((item)=> item.description !== todo.description)
-
-        setToDo(updatedToDo)
-
-        date[todo.date] = date[todo.date] -  1
-
-
-        if(!date[todo.date]){
-            delete date[todo.date]
+        const handleCheckbox = () => {
+            todo[index].completed = !todo[index].completed
+            setTodo([...todo])
         }
 
-        setDate({...date})
-    }
+        const handleDelete = () => {
+            const updatedTodo = todo.filter(item => item.description !== singleTodo.description)
+            setTodo(updatedTodo)
 
-    const editTodo = ()=>{
-        setIsEdit(true)
-    }
+            date[singleTodo.date] = date[todo.date] - 1;
 
-    const changeToDoStatus = ()=>{
-        
-        toDo[index].completed = !toDo[index].completed
-
-        setToDo([...toDo])
-    }
-
-    const handleInputChange = (e)=>{
-        setNewDescription(e.target.value)
-    }
-
-    const saveEdit = ()=>{
-        if(toDo.some((todo)=> todo.description === newDescription && newDescription !== todo.description)){
-            alert("ToDo with this name already exsit")
-            return
-        }
-
-        toDo[index].description = newDescription
-
-        setToDo([...toDo])
-
-        setIsEdit(false)
-    }
-
-
-    const cancelEdit = ()=>{
-        setIsEdit(false)
-        setNewDescription(todo.description)
-    }
-
-
-    return(
-        <div style={{display:"flex"}}>
-            {!isEdit && <input type="checkbox" checked={todo.completed} onChange={changeToDoStatus}></input>}
-            {!isEdit ? <p>{todo.description}</p> : 
-            <input type="text" value={newDescription} onChange={handleInputChange}></input>
+            if(!date[singleTodo.date]){
+                delete date[singleTodo.date]
             }
-            <button disabled={isEdit} onClick={editTodo}>Edit</button>
-            <button onClick={deleteToDo} disabled={isEdit}>Delete</button>
-            {isEdit && <button onClick={saveEdit}>Save</button>}
-            {isEdit && <button onClick={cancelEdit} >Cancel</button>}
+
+            setDate({...date})
+        }
+
+        const handleEdit = () => {
+            setIsEdit(true)
+        }
+
+        const handleChangeInput = (e)=> {
+            setNewDescription(e.target.value)
+        }
+
+        const cancelButton = ()=> {
+            setNewDescription('')
+            setIsEdit(false)
+
+        }
+
+        const saveButton = () => {
+            if(todo.some((item)=> item.description === newDescription)){
+                alert('Description with this text is already exists')
+                return
+            }
+
+            todo[index].description = newDescription
+            setTodo([...todo])
+            setIsEdit(false)
+        }
+
+      return (
+        <div style={{display:"flex"}}>
+            {!isEdit && <input type='checkbox' checked={singleTodo.completed} onChange={handleCheckbox}/>}
+            {!isEdit ? <p>{singleTodo.description}</p> :
+            ( <><input type='text' name='newDescription' value={newDescription} onChange={handleChangeInput} /><button onClick={saveButton}>Save</button><button onClick={cancelButton}>Cancel</button></>
+            ) }
+            {!isEdit && <button onClick={handleEdit}>Edit</button>}
+           <button onClick={handleDelete}>Delete</button>
         </div>
-    )
+      )
 }

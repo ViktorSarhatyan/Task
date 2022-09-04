@@ -1,11 +1,11 @@
 import './App.css';
-import { CreateToDo } from './component/createtoDo/createtodo';
-import { ToDoList } from './component/todoList/todolist';
+import { CreateTodo } from './component/createTodo/createTodo';
 import {
   BrowserRouter,
   Routes,
   Route,
 } from "react-router-dom";
+import {TodoList} from './component/todoList/todoList'
 
 
 
@@ -13,8 +13,8 @@ function App() {
   return (
     <BrowserRouter>
     <Routes>
-      <Route path="/" element={<CreateToDo />}/>
-      <Route path='todo:group' element={<ToDoList/>}/>
+      <Route path="/" element={<CreateTodo />}/>
+      <Route path='todo:group' element={<TodoList/>}/>
     </Routes>
   </BrowserRouter>
   );
